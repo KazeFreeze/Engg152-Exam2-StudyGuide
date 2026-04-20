@@ -1,6 +1,8 @@
 import { Card } from '../components/Card';
 import { Collapsible } from '../components/Collapsible';
 import { Math } from '../components/Math';
+import { MiniQuiz } from '../components/MiniQuiz';
+import { ERRORS_QUIZ } from './quizzes';
 
 export function Errors(): JSXEl {
   return (
@@ -271,6 +273,12 @@ export function Errors(): JSXEl {
           </ol>
         </Card>
       </section>
+
+      <MiniQuiz
+        title="Retention check — Steady-State Error"
+        subtitle="5 questions • instant feedback"
+        questions={ERRORS_QUIZ}
+      />
     </div>
   );
 }

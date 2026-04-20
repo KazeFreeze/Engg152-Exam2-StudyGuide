@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import { Check, Eye, EyeOff } from 'lucide-react';
 import { Card } from '../components/Card';
 import { Math } from '../components/Math';
+import { MiniQuiz } from '../components/MiniQuiz';
+import { FINAL_QUIZ } from './quizzes';
 
 interface Problem {
   readonly id: string;
@@ -45,6 +47,22 @@ export function Practice(): JSXEl {
           <ProblemCard key={p.id} index={i + 1} problem={p} />
         ))}
       </div>
+
+      <section className="pt-4">
+        <h2 className="text-2xl font-bold text-slate-50 mb-1">
+          🏁 Cumulative test
+        </h2>
+        <p className="text-sm text-slate-300 mb-4">
+          Eight questions spanning all four topics. Treat it like a timed
+          warm-up — answer without peeking at the study guide, then review any
+          you miss.
+        </p>
+        <MiniQuiz
+          title="Final retention test — all topics"
+          subtitle="8 questions • instant feedback"
+          questions={FINAL_QUIZ}
+        />
+      </section>
     </div>
   );
 }

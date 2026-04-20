@@ -1,6 +1,8 @@
 import { Card } from '../components/Card';
 import { Collapsible } from '../components/Collapsible';
 import { Math } from '../components/Math';
+import { MiniQuiz } from '../components/MiniQuiz';
+import { STABILITY_QUIZ } from './quizzes';
 
 export function Stability(): JSXEl {
   return (
@@ -154,6 +156,12 @@ export function Stability(): JSXEl {
           </ol>
         </Card>
       </section>
+
+      <MiniQuiz
+        title="Retention check — Stability"
+        subtitle="5 questions • instant feedback"
+        questions={STABILITY_QUIZ}
+      />
     </div>
   );
 }

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { ArrowRight, SkipBack, Info } from 'lucide-react';
 import { Card } from '../components/Card';
 import { Math } from '../components/Math';
+import { MiniQuiz } from '../components/MiniQuiz';
 import { SCENARIOS, type ScenarioId } from './routh-data';
+import { ROUTH_QUIZ } from './quizzes';
 
 export function RouthArray(): JSXEl {
   return (
@@ -94,6 +96,12 @@ export function RouthArray(): JSXEl {
         comes from. Tap <em>Next</em> to advance.
       </p>
       <RouthInteractive />
+
+      <MiniQuiz
+        title="Retention check — Routh Array"
+        subtitle="5 questions • instant feedback"
+        questions={ROUTH_QUIZ}
+      />
     </div>
   );
 }
