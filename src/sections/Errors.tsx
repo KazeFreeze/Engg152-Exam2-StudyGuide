@@ -42,6 +42,155 @@ export function Errors(): JSXEl {
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold text-slate-100">
+          Intuition — what are integrators, system type, and test signals?
+        </h2>
+
+        <Card tone="info" title="What is an integrator?">
+          <p>
+            A block with transfer function <Math tex="1/s" /> is an{' '}
+            <strong>integrator</strong>. In time-domain, it integrates its input:
+          </p>
+          <Math display tex="y(t) = \int_0^t u(\tau)\,d\tau \;\;\Longleftrightarrow\;\; Y(s) = \tfrac{1}{s}U(s)" />
+          <p className="mt-2">
+            Physical example: feed a constant velocity{' '}
+            <Math tex="v" /> into <Math tex="1/s" /> and you get the position{' '}
+            <Math tex="vt" />. Each integrator <em>accumulates</em> whatever
+            signal passes through it.
+          </p>
+          <p className="text-sm text-slate-400 mt-2">
+            A pole at <Math tex="s = 0" /> in <Math tex="G(s)" /> means there is
+            a factor of <Math tex="1/s" /> — i.e., a built-in integrator.
+          </p>
+        </Card>
+
+        <Card tone="info" title="What does 'system type' mean?">
+          <p>
+            <strong>Type N</strong> = the forward-path{' '}
+            <Math tex="G(s)" /> has exactly <Math tex="N" /> poles at the origin.
+            Count the factors of <Math tex="s" /> in the denominator.
+          </p>
+          <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
+            <li>
+              <strong>Type 0:</strong>{' '}
+              <Math tex="G = \dfrac{10}{(s+2)(s+5)}" /> — no <Math tex="s" /> in
+              denominator, zero integrators.
+            </li>
+            <li>
+              <strong>Type 1:</strong>{' '}
+              <Math tex="G = \dfrac{10}{s(s+2)}" /> — one integrator.
+            </li>
+            <li>
+              <strong>Type 2:</strong>{' '}
+              <Math tex="G = \dfrac{10}{s^2(s+2)}" /> — two integrators.
+            </li>
+          </ul>
+          <p className="mt-2 text-sm text-slate-300">
+            Intuition: an integrator inside the loop can keep pushing the output
+            even when the error is small, because it has <em>memory</em> of the
+            past error. The more integrators, the &ldquo;smarter&rdquo; the
+            loop is at tracking changing references without steady lag.
+          </p>
+        </Card>
+
+        <Card tone="info" title="Step, ramp, parabola — what do they physically mean?">
+          <p>
+            These are the three canonical <strong>test inputs</strong>. Each is
+            the derivative/integral of the next — they form a family that
+            probes increasingly demanding reference motion.
+          </p>
+          <div className="mt-3 overflow-x-auto">
+            <table className="min-w-full text-sm border border-slate-700">
+              <thead className="bg-slate-800 text-slate-200">
+                <tr>
+                  <th className="px-3 py-2 text-left">Signal</th>
+                  <th className="px-3 py-2 text-left">Time</th>
+                  <th className="px-3 py-2 text-left">Laplace</th>
+                  <th className="px-3 py-2 text-left">Physical meaning</th>
+                </tr>
+              </thead>
+              <tbody className="[&>tr]:border-t [&>tr]:border-slate-700">
+                <tr>
+                  <td className="px-3 py-2">Step</td>
+                  <td className="px-3 py-2">
+                    <Math tex="r(t) = u(t)" />
+                  </td>
+                  <td className="px-3 py-2">
+                    <Math tex="1/s" />
+                  </td>
+                  <td className="px-3 py-2">
+                    &ldquo;Go to position 1 and stay.&rdquo; Constant target.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-3 py-2">Ramp</td>
+                  <td className="px-3 py-2">
+                    <Math tex="r(t) = t" />
+                  </td>
+                  <td className="px-3 py-2">
+                    <Math tex="1/s^2" />
+                  </td>
+                  <td className="px-3 py-2">
+                    &ldquo;Move at constant velocity.&rdquo; Target with
+                    constant slope.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-3 py-2">Parabola</td>
+                  <td className="px-3 py-2">
+                    <Math tex="r(t) = t^2/2" />
+                  </td>
+                  <td className="px-3 py-2">
+                    <Math tex="1/s^3" />
+                  </td>
+                  <td className="px-3 py-2">
+                    &ldquo;Move at constant acceleration.&rdquo; Target whose
+                    velocity ramps up.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-sm text-slate-300">
+            Concrete picture: a satellite dish. A <strong>step</strong> asks it
+            to point at a fixed star. A <strong>ramp</strong> asks it to track a
+            satellite gliding across the sky at steady angular rate. A{' '}
+            <strong>parabola</strong> asks it to track a rocket accelerating
+            overhead.
+          </p>
+        </Card>
+
+        <Card tone="success" title="Why we distinguish type × input">
+          <p>
+            Each integrator in the loop &ldquo;cancels&rdquo; one order of{' '}
+            <Math tex="s" /> in <Math tex="R(s)" /> when you apply the Final
+            Value Theorem to <Math tex="E(s) = R(s)/(1+G)" />. Roughly:
+          </p>
+          <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
+            <li>
+              To track a <strong>step</strong> with zero error → need{' '}
+              <strong>≥ 1 integrator</strong> (Type 1+).
+            </li>
+            <li>
+              To track a <strong>ramp</strong> with zero error → need{' '}
+              <strong>≥ 2 integrators</strong> (Type 2+).
+            </li>
+            <li>
+              To track a <strong>parabola</strong> with zero error → need{' '}
+              <strong>≥ 3 integrators</strong> (Type 3+).
+            </li>
+          </ul>
+          <p className="mt-2 text-sm text-slate-300">
+            If the system has just enough integrators for a given input, you
+            get a <em>finite</em> nonzero error governed by{' '}
+            <Math tex="K_p, K_v, K_a" />. Too few integrators → error{' '}
+            <Math tex="\to \infty" /> (the system falls behind forever). This
+            is exactly what the next table encodes.
+          </p>
+        </Card>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold text-slate-100">
           Static error constants + system type
         </h2>
         <Card>
